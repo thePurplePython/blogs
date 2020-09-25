@@ -284,7 +284,7 @@ https://archive.ics.uci.edu/ml/datasets/abalone
 }
 ```
 
-2c.) Lastly, we can view the *Step Functions* visual workflow and the jobís output results with a prediction score column added.  Note, the model is a pipeline model that includes preprocessing  (one hot encoding, scaling, etc.) the data before sending it to the supervised learning algorithm.
+2c.) Lastly, we can view the *Step Functions* visual workflow and the job's output results with a prediction score column added.  Note, the model is a pipeline model that includes preprocessing  (one hot encoding, scaling, etc.) the data before sending it to the supervised learning algorithm.
 
 ![2c-sagemaker-visual-workflow.png](../master/images/2c-sagemaker-visual-workflow.png)
 
