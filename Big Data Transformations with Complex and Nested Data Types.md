@@ -1,4 +1,5 @@
 Big Data Transformations with Complex and Nested Data Types
+
 ***Apache Spark*** is a distributed computing big data analytics framework designed to transform, engineer, and process massive amounts of data (think terabytes and petabytes) across a cluster of machines.  Often working with diverse datasets, you will come across complex data types and formats that require expensive compute and transformations (think *IoT* devices).  Extremely complicated and specialized, under the hood, ***Apache Spark*** is a master of its craft when it comes to scaling big data engineering efforts.  In this blog using the native *Scala* API I will walk you through examples of 1.) how to flatten and normalize semi-structured *JSON* data with nested schema (*array* and *struct*), 2.) how to pivot your data, and 3.) how to save the data to storage as *parquet* schema for downstream analytics.  To note, the same exercises can be achieved using the *Python* API and *Spark SQL*.
 
 1a.) Let's view our beautiful multi-line *JSON* schema (dummy data from my favorite video game).
@@ -263,4 +264,3 @@ root
 ```
 
 These exercises just scratch the surface of what ***Apache Spark*** is capable of for big data engineering and advanced analytics use cases.  Thank you for reading this blog.  Please reach out with any questions, interests, collaboration, and or feedback.
- // garrett r peternel
