@@ -4,7 +4,7 @@
 
 ***Apache Spark*** is a distributed computing big data analytics framework designed to transform, engineer, and process massive amounts of data (think terabytes and petabytes) across a cluster of machines.  Often working with diverse datasets, you will come across complex data types and formats that require expensive compute and transformations (think *IoT* devices).  Extremely complicated and specialized, under the hood, ***Apache Spark*** is a master of its craft when it comes to scaling big data engineering efforts.  In this blog using the native *Scala* API I will walk you through examples of 1.) how to flatten and normalize semi-structured *JSON* data with nested schema (*array* and *struct*), 2.) how to pivot your data, and 3.) how to save the data to storage as *parquet* schema for downstream analytics.  To note, the same exercises can be achieved using the *Python* API and *Spark SQL*.
 
-## Normalize Semi-Structured Nested Schema
+## Step 1: Normalize Semi-Structured Nested Schema
 
 1a.) Let's view our beautiful multi-line *JSON* schema (dummy data from my favorite video game).
 
@@ -211,7 +211,7 @@ root
 +---------+-------+-------+------------+---------------+
 ```
 
-## Transform and Re-Shape Data
+## Step 2: Transform and Re-Shape Data
 
 2a.)  This next exercise will take our flattened dataset and apply ```pivot``` functions, which trigger a wide transformation where distinct values for a specific column are transposed into individual columns.  Pivots can be performed with or without aggregation.  Without aggregation is often a required schema for data science use cases using many columns *a.k.a* features as input to learning algorithms.  An efficient performance tip is to specify your unique values in the ```pivot``` function input so ***Spark*** does not have to trigger an additional job.
 
@@ -246,7 +246,7 @@ val aggPivotDf = (finalDf
 +-------+---------+---------+
 ```
 
-## Write to Parquet Format
+## Step 3: Write to Parquet Format
 
 3a.)  The final exercise will simply write out our data to storage.  *Parquet* format will be used because it is a splittable file format, highly compressed for space efficiency, and optimized for columnar storage hence making it fabulous for downstream big data analytics.
 
