@@ -8,7 +8,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
 
 ## Example 1: Orchestrate Data Processing Jobs via Amazon EMR
 
-1a.) Letís view our input sample dataset (dummy data from my favorite video game) in *Amazon S3*.
+1a.) Let's view our input sample dataset (dummy data from my favorite video game) in *Amazon S3*.
 
 ![1a-destiny-dataset.png](/api/uploads/7fc8c061b545bc12d2283e6ad1c08421/1a-destiny-dataset.png)
 
@@ -95,10 +95,10 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
               "cluster",
               "--class",
               "awsStepFunctionsExampleApp",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/jars/aws-step-functions-demo_2.11-1.0.jar",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/input.csv",
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/jars/aws-step-functions-demo_2.11-1.0.jar",
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/input.csv",
               "class",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/output.parquet"
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/output.parquet"
             ]
           }
         }
@@ -203,10 +203,10 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
               "cluster",
               "--class",
               "awsStepFunctionsExampleApp",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/jars/aws-step-functions-demo_2.11-1.0.jar",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/input.csv",
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/jars/aws-step-functions-demo_2.11-1.0.jar",
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/input.csv",
               "class",
-              "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/output.parquet"
+              "s3://<bucket>/datasets/user/demos/aws-step-functions-example/output.parquet"
             ]
           }
         }
@@ -265,12 +265,12 @@ https://archive.ics.uci.edu/ml/datasets/abalone
           "DataSource": {
             "S3DataSource": {
               "S3DataType": "S3Prefix",
-              "S3Uri": "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/abalone/batch/batch.csv"
+              "S3Uri": "s3://<bucket>/datasets/user/demos/aws-step-functions-example/abalone/batch/batch.csv"
             }
           }
         },
         "TransformOutput": {
-          "S3OutputPath": "s3://<bucket>/datasets/e363549/demos/aws-step-functions-example/abalone/inference/predictions.csv"
+          "S3OutputPath": "s3://<bucket>/datasets/user/demos/aws-step-functions-example/abalone/inference/predictions.csv"
         },
         "TransformResources": {
           "InstanceCount": 1,
@@ -294,6 +294,4 @@ In summary for this example, you can utilize *Step Functions* to automate and sc
 
 ## Conclusion
 
-These two examples cover a small portion of what ***AWS*** services are capable of to scale data engineering and machine learning workflows.
-
-Thank you for reading this blog. Please reach out with any questions, interests, collaboration, and or feedback.
+These two examples cover a small portion of what ***AWS*** services are capable of to scale data engineering and machine learning workflows.  Thank you for reading this blog. Please reach out with any questions, interests, collaboration, and or feedback.
