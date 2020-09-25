@@ -226,7 +226,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
 }
 ```
 
-![1d-emr-visual-workflow.png](/api/uploads/c8d9451f6f8b636521ab9607abb851f6/1d-emr-visual-workflow.png)
+![1d-emr-visual-workflow.png](../master/images/1d-emr-visual-workflow.png)
 
 1e.) Finally, letís schedule via *CloudWatch* to execute every 15 min as a simple cron expression (0 */15 * ? * *).
 
@@ -242,13 +242,13 @@ To the next example Ö
 
 https://archive.ics.uci.edu/ml/datasets/abalone
 
-![2a-abalone-dataset.png](/api/uploads/8c6b3bcaded348ceaab593f8e8c049c8/2a-abalone-dataset.png)
+![2a-abalone-dataset.png](../master/images/2a-abalone-dataset.png)
 
 2b.) Next, letís create the *ASL* structure triggering a batch transform job on a raw unlabeled (no *rings* column) batch dataset that needs inference via the trained model stored in *S3*.  ***Please note currently you must attach an inline policy to the role selected for the state machine***.
 
-![2b-inline-policy.png](/api/uploads/43caec675e1f8af89759469b58fcf3ed/2b-inline-policy.png)
+![2b-inline-policy.png](../master/images/2b-inline-policy.png)
 
-![2b-attach-inline-policy.png](/api/uploads/9c99dd104d64cb0193441b72b56e1362/2b-attach-inline-policy.png)
+![2b-attach-inline-policy.png](../master/images/2b-attach-inline-policy.png)
 
 ```json
 {
@@ -286,9 +286,9 @@ https://archive.ics.uci.edu/ml/datasets/abalone
 
 2c.) Lastly, we can view the *Step Functions* visual workflow and the jobís output results with a prediction score column added.  Note, the model is a pipeline model that includes preprocessing  (one hot encoding, scaling, etc.) the data before sending it to the supervised learning algorithm.
 
-![2c-sagemaker-visual-workflow.png](/api/uploads/d55c69d8a33bb4586092ea54ad3d2b5c/2c-sagemaker-visual-workflow.png)
+![2c-sagemaker-visual-workflow.png](../master/images/2c-sagemaker-visual-workflow.png)
 
-![2c-batch-transform-output.png](/api/uploads/e0268e4203f52f2849a57f3829cc36f3/2c-batch-transform-output.png)
+![2c-batch-transform-output.png](../master/images/2c-batch-transform-output.png)
 
 In summary for this example, you can utilize *Step Functions* to automate and schedule your machine learning jobs (pre-processing, training, tuning, model hosting, self-service & batch inference).  *Step Functions* and *SageMaker* integration support the following APIs: ```CreateEndpoint```, ```CreateEndpointConfig```, ```CreateHyperParameterTuningJob```, ```CreateLabelingJob```, ```CreateModel```, ```CreateTrainingJob```, and ```CreateTransformJob```.
 
