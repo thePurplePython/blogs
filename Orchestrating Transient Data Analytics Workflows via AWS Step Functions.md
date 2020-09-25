@@ -1,4 +1,4 @@
-Orchestrating Transient Data Analytics Workflows via AWS Step Functions
+***Orchestrating Transient Data Analytics Workflows via AWS Step Functions***
 
 ## Introduction
 
