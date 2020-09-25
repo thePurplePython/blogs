@@ -76,7 +76,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
     }
 ```
 
-1c.) Now we can perform some data processing (simple partition by a column) by submitting a job to the cluster and terminating infrastructure upon completion via *ASL*.  Letís also inspect our output data in *S3*.
+1c.) Now we can perform some data processing (simple partition by a column) by submitting a job to the cluster and terminating infrastructure upon completion via *ASL*.  Let's also inspect our output data in *S3*.
 
 ```json
 "Example_Job_Step_1": {
@@ -119,7 +119,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
     }
 ```
 
-![1c-destiny-partitions.png](/api/uploads/f2d2b755f40c0a8416fc9366b89392e5/1c-destiny-partitions.png)
+![1c-destiny-partitions.png](../master/images/1c-destiny-partitions.png)
 
 1d.) Here is the complete JSON *ASL* structure and a visual workflow screenshot of what is going on.
 
