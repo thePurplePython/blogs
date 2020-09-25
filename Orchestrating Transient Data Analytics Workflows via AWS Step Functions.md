@@ -10,7 +10,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
 
 1a.) Let's view our input sample dataset (dummy data from my favorite video game) in *Amazon S3*.
 
-![1a-destiny-dataset.png](/api/uploads/7fc8c061b545bc12d2283e6ad1c08421/1a-destiny-dataset.png)
+![1a-destiny-dataset.png](../images/1a-destiny-dataset.png)
 
 1b.) Next, I will create a state machine that spins up an *EMR* cluster (group of *EC2* instances) via *ASL*.
 
