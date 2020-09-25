@@ -294,4 +294,4 @@ In summary for this example, you can utilize *Step Functions* to automate and sc
 
 ## Conclusion
 
-These two examples cover a small portion of what ***AWS*** services are capable of to scale data engineering and machine learning workflows.  Thank you for reading this blog. Please reach out with any questions, interests, collaboration, and or feedback.
+These two examples cover a small portion of what ***AWS*** services are capable of to scale data engineering and machine learning workflows.  Thank you for reading this blog.
