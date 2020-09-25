@@ -230,7 +230,7 @@ In this blog, I will walk you through 1.) how to orchestrate data processing job
 
 1e.) Finally, let's schedule via *CloudWatch* to execute every 15 min as a simple cron expression (0 */15 * ? * *).
 
-![1e-cloudwatch-cron.png](/api/uploads/7373244ba8446b270504f30fb234742f/1e-cloudwatch-cron.png)
+![1e-cloudwatch-cron.png](../master/images/1e-cloudwatch-cron.png)
 
 In summary for this example, you can utilize *Step Functions* to automate and schedule your data processing jobs.  The level of sophistication typically depends on data volume and can range from a few simple steps on a single *EC2* machine to distributing multiple jobs in parallel on the same cluster or across multiple clusters with different instance types.  I recommend including additional *EMR* tuning configurations for selected software (i.e. YARN, Spark, Hive, Sqoop) in the JSON *ASL* to optimize job performance.  Also, choose the number and kind of *EC2* instance types wisely to save costs and execution time.  Your decision should mostly depend on the total data volume that needs processed and job type (CPU or memory constrained).
 
