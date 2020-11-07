@@ -2,7 +2,7 @@
 
 ***Apache Spark*** is a distributed computing big data analytics framework designed to transform, engineer, and process massive amounts of data (think terabytes and petabytes) across a cluster of machines.  It has a plethora of embedded components for specific tasks including Spark SQL’s Structured DataFrame and Structured Streaming APIs, both which will be discussed in this blog.  One of the challenges with Spark is appending new data to a data lake thus producing *'small and skewed files'* on write.  It can be tricky to solve these challenges completely, which consequently have a negative impact on users performing additional downstream Spark layers, Data Science analysis, and SQL queries consuming the *'small and skewed files'*.  A fairly new framework called ***Delta Lake*** helps address these issues.
 
-However, in this blog using the native *Scala* API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark *Structured Streaming* job for gracefully auto-terminating periodic data processed appends of new source data, and 2.) how to control the output size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in Amazon EMR).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in Amazon S3) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
+However, in this blog using the native *Scala* API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark *Structured Streaming* job for gracefully auto-terminating periodic data processed appends of new source data, and 2.) how to control the output size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in ***Amazon EMR***).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in ***Amazon S3***) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
 
 ## Example 1: Spark Streaming Transient Termination Timer
 
@@ -43,7 +43,7 @@ def readStream(maxFilesPerTrigger: Int, basePath: String): DataFrame = {
 }
 ```
 
-1c.) Now we execute the streaming query as *parquet* file sink format and *append* mode to ensure only new data is periodically written incrementally as well as include function arguments:
+1c.) Now we execute the streaming query as `parquet` file sink format and `append` mode to ensure only new data is periodically written incrementally as well as include function arguments:
 - *df* (source dataframe)
 - *repartition* (number of persisted output partitions every trigger fire)
 - *checkpointPath* (recovery checkpoint location)
@@ -86,8 +86,8 @@ def kill(): Unit = {
 ```
 
 1f.) Apply the functions to Scala values, and optionally set additional Spark configurations if desired:
-- `spark.sql.session.timeZone` (set to *UTC* to avoid timestamp and timezone mismatch issues)
-- `spark.sql.shuffle.partitions` (set to number of desired partitions created on wide "shuffles" transformations [value varies on: data volume & structure, cluster hardware & partition size, cores available, and application intentions])
+- `spark.sql.session.timeZone` (set to `UTC` to avoid timestamp and timezone mismatch issues)
+- `spark.sql.shuffle.partitions` (set to number of desired partitions created on *Wide "shuffles" Transformations* [value varies on: data volume & structure, cluster hardware & partition size, cores available, and application intentions])
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -109,9 +109,9 @@ kill()
 
 In summary, the streaming job will continuously process, convert, and append micro-batches of unprocessed data only from the source json location to the target parquet location.  After the timer runs out (ex: 5 min) a graceful shutdown of the Spark application occurs.  For Spark application deployment, best practices include defining a Scala `object` with a `main()` method including `args: Array[String]` as command line arguments.  Then create a required directory structure to compile the `<appName>.scala` (application code) file with a `build.sbt` (library dependencies) file all via *sbt* build tool to create a *JAR* file, which will be used to run the application via *spark-submit*.
 
-Here is official Apache Spark Documentation explaining the steps (https://spark.apache.org/docs/latest/quick-start.html#self-contained-applications).
+Here is official **Apache Spark Documentation** explaining the steps (https://spark.apache.org/docs/latest/quick-start.html#self-contained-applications).
 
-In AWS, via *Amazon EMR* you can submit applications as job steps and auto-terminate the cluster's infrastructure when all steps complete.  This can be fully orchestrated, automated, and scheduled via services like *AWS Step Functions*, *AWS Lambda*, and *Amazon CloudWatch*.
+In AWS, via ***Amazon EMR*** you can submit applications as job steps and auto-terminate the cluster's infrastructure when all steps complete.  This can be fully orchestrated, automated, and scheduled via services like ***AWS Step Functions***, ***AWS Lambda***, and ***Amazon CloudWatch***.
 
 Sometimes the output file size of a streaming job will be rather *'skewed'* due to a sporadic cadence arrival of the source data, as well as, the timing challenge of always syncing it with the trigger of the streaming job.  Example 2 will help address and optimize the *'small and skewed files'* dilemna.
 
