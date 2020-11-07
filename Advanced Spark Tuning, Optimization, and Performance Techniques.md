@@ -113,7 +113,7 @@ Here is official Apache Spark Documentation explaining the steps (https://spark.
 
 In AWS, via *Amazon EMR* you can submit applications as job steps and auto-terminate the cluster's infrastructure when all steps complete.  This can be fully orchestrated, automated, and scheduled via services like *AWS Step Functions*, *AWS Lambda*, and *Amazon CloudWatch*.
 
-Often the output file size of a streaming job will be rather *'skewed'* due to a sporadic cadence arrival of the source data, as well as, the timing challenge of always syncing it with the trigger of the streaming job.  Example 2 will help address and optimize the *'small and skewed files'* dilemna.
+Sometimes the output file size of a streaming job will be rather *'skewed'* due to a sporadic cadence arrival of the source data, as well as, the timing challenge of always syncing it with the trigger of the streaming job.  Example 2 will help address and optimize the *'small and skewed files'* dilemna.
 
 To the next example ...
 
