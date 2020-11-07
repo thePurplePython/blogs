@@ -131,9 +131,9 @@ def readParquet(basePath: String): DataFrame = {
   return parquetDf
 }
 
-def numPartitions(df: DataFrame): Int = {
-  val num = df.rdd.getNumPartitions
-  return num
+def num(df: DataFrame): Int = {
+  val numPartitions = df.rdd.getNumPartitions
+  return numPartitions
 }
 ```
 
@@ -141,12 +141,12 @@ def numPartitions(df: DataFrame): Int = {
 
 ```scala
 def ram(size: Int): Int = {
-  val mb = size
-  return mb
+  val ramMb = size
+  return ramMb
 }
 
 def target(size: Int): Int = {
-  val mb = size
-  return mb
+  val targetMb = size
+  return targetMb
 }
 ```
