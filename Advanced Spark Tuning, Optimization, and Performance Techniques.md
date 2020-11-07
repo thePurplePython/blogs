@@ -2,7 +2,7 @@
 
 ***Apache Spark*** is a distributed computing big data analytics framework designed to transform, engineer, and process massive amounts of data (think terabytes and petabytes) across a cluster of machines.  It has a plethora of embedded components for specific tasks including Spark SQL’s Structured DataFrame and Structured Streaming APIs, both which will be discussed in this blog.  One of the challenges with Spark is appending new data to a data lake thus producing *'small and skewed files'* on write.  It can be tricky to solve these challenges completely, which consequently have a negative impact on users performing additional downstream Spark layers, Data Science analysis, and SQL queries consuming the *'small and skewed files'*.  A fairly new framework called ***Delta Lake*** helps address these issues.
 
-However, in this blog using the native Scala API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark Structured Streaming job for gracefully auto-terminating periodic appends of new source data, and 2.) how to control the output size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in Amazon EMR).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in Amazon S3) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
+However, in this blog using the native *Scala* API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark *Structured Streaming* job for gracefully auto-terminating periodic data processed appends of new source data, and 2.) how to control the output size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in Amazon EMR).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in Amazon S3) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
 
 ## Example 1: Spark Streaming Transient Termination Timer
 
@@ -27,7 +27,7 @@ val schema = (new StructType()
 
 1b.) Next, we will read the dataset as a streaming dataframe with the schema defined as well as include function arguments:
 - *maxFilesPerTrigger* (number of max files read per trigger)
-- *basePath* (source location of dataset)
+- *basePath* (data source location)
 
 ```scala
 import org.apache.spark.sql.DataFrame
@@ -48,7 +48,7 @@ def readStream(maxFilesPerTrigger: Int, basePath: String): DataFrame = {
 - *repartition* (number of persisted output partitions every trigger fire)
 - *checkpointPath* (recovery checkpoint location)
 - *trigger* (trigger interval processing time)
-- *targetPath* (target location)
+- *targetPath* (data target location)
 
 ```scala
 import org.apache.spark.sql.streaming.Trigger
