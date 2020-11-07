@@ -87,7 +87,11 @@ def kill(): Unit = {
 
 1f.) Apply the functions to Scala values, and optionally set additional Spark configurations if desired:
 - `spark.sql.session.timeZone` (set to *UTC* to avoid timestamp and timezone mismatch issues)
-- `spark.sql.shuffle.partitions` (set to number of desired partitions created on *Wide "shuffles" Transformations* [value varies on: data volume & structure, cluster hardware & partition size, cores available, and application intentions])
+- `spark.sql.shuffle.partitions` (set to number of desired partitions created on *Wide "shuffles" Transformations*) value varies on things like:
+1. data volume & structure
+2. cluster hardware & partition size
+3. cores available
+4. application's intention
 
 ```scala
 import org.apache.spark.sql.SparkSession
