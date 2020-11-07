@@ -107,7 +107,7 @@ kill()
 
 ![1g-iot-parquet-output.png](../master/images/1g-iot-parquet-output.png)
 
-In summary, the streaming job will continuously process, convert, and append micro-batches of unprocessed data only from the source json location to the target parquet location.  After the timer runs out (ex: 5 min) a graceful shutdown of the Spark application occurs.  For Spark application deployment, best practices include defining a Scala `object` with a `main()` method including `args: Array[String]` as command line arguments.  Then create a required directory structure to compile the `<appName>.scala` (application code) file with a `build.sbt` (library dependencies) file all via *sbt* build tool to create a *JAR* file, which will be used to run the application via `spark-submit`.
+In summary, the streaming job will continuously process, convert, and append micro-batches of unprocessed data only from the source json location to the target parquet location.  After the timer runs out (ex: 5 min) a graceful shutdown of the Spark application occurs.  For Spark application deployment, best practices include defining a Scala `object` with a `main()` method including `args: Array[String]` as command line arguments.  Then create a required directory structure to compile the `<appName>.scala` (application code) file with a `build.sbt` (library dependencies) file all via *SBT* build tool to create a *JAR* file, which will be used to run the application via `spark-submit`.
 
 Here is official **Apache Spark Documentation** explaining the steps (https://spark.apache.org/docs/latest/quick-start.html#self-contained-applications).
 
