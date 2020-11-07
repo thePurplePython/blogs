@@ -8,15 +8,11 @@ However, in this blog using the native Scala API I will walk you through two Spa
 
 1a.) Let’s view and define the schema for the public IoT device event dataset retrieved from *Databricks Community Edition* stored at ***dbfs:/databricks-datasets/structured-streaming/events/***.
 
-```bash
-ls /blogs/source/devices.json/
-```
+```ls /blogs/source/devices.json/```
 
 ![1a-iot-dataset.png](../master/images/1a-iot-dataset.png)
 
-```bash
-head /blogs/source/devices.json/file-0.json/
-```
+```head /blogs/source/devices.json/file-0.json/```
 
 ![1a-iot-sample.png](../master/images/1a-iot-sample.png)
 
@@ -107,9 +103,7 @@ kill()
 
 1g.) View the job's output location
 
-```bash
-/blogs/target/devices.parquet/
-```
+```ls /blogs/target/devices.parquet/```
 
 ![1g-iot-parquet-output.png](../master/images/1g-iot-parquet-output.png)
 
