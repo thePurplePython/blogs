@@ -139,7 +139,7 @@ def numPartitions(df: DataFrame): Int = {
 
 2b.) In order to calculate the desired output partition (file) size you need to estimate the size (in megabytes) of the input dataframe by persisting it in memory.  This can be determined ad hoc beforehand via executing *df.cache()* or *df.persist()*, call an action like *df.count()* or *df.foreach(x => println(x))* to cache the entire dataframe, and then search for the dataframe's RAM size in the *Spark UI* under the *Storage* tab.
 
-```
+```scala
 def ram(size: Int): Int = {
   val mb = size
   return mb
