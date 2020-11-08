@@ -12,7 +12,7 @@ However, in this blog using the native Scala API I will walk you through two Spa
 
 ```ls /blogs/source/devices.json/```
 
-![1a-iot-dataset.png](../master/images/1a-iot-dataset.png)
+![1a-iot-dataset-json-input.png](../master/images/1a-iot-dataset-json-input.png)
 
 ```head /blogs/source/devices.json/file-0.json/```
 
@@ -107,7 +107,7 @@ kill()
 
 ```ls /blogs/target/devices.parquet/```
 
-![1g-iot-parquet-output.png](../master/images/1g-iot-parquet-output.png)
+![1g-iot-dataset-parquet-output.png](../master/images/1g-iot-dataset-parquet-output.png)
 
 In summary, the streaming job will continuously process, convert, and append micro-batches of unprocessed data only from the source json location to the target parquet location.  After the timer runs out (ex: 5 min) a graceful shutdown of the Spark application occurs.  For Spark application deployment, best practices include defining a Scala `object` with a `main()` method including `args: Array[String]` as command line arguments.  Then create a required directory structure to compile the `<appName>.scala` (application code) file with a `build.sbt` (library dependencies) file all via *SBT* build tool to create a *JAR* file, which will be used to run the application via `spark-submit`.
 
