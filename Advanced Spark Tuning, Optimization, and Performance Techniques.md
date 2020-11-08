@@ -128,6 +128,12 @@ To the next example ...
 ![2a-airlines-dataset-parquet-input.png](../master/images/2a-airlines-dataset-parquet-input.png)
 
 ```scala
+display(df)
+```
+
+![2a-airlines-sample.png](../master/images/2a-airlines-sample.png)
+
+```scala
 import org.apache.spark.sql.DataFrame
 
 def readParquet(basePath: String): DataFrame = {
