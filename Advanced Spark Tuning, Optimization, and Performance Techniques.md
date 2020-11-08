@@ -79,7 +79,7 @@ def stop(n: Int): Unit = {
 }
 ```
 
-1e.)  Lastly, the streaming job spark session will be executed after the timer expires thus terminating the short-lived application.
+1e.)  Lastly, the streaming job Spark Session will be executed after the timer expires thus terminating the short-lived application.
 
 ```scala
 def kill(): Unit = {
@@ -87,7 +87,7 @@ def kill(): Unit = {
 }
 ```
 
-1f.) Apply the functions to Scala values, and optionally set additional Spark configurations if desired:
+1f.) Apply the functions to Scala values, and optionally set additional Spark properties if desired:
 - `spark.sql.session.timeZone` (set to *UTC* to avoid timestamp and timezone mismatch issues)
 - `spark.sql.shuffle.partitions` (set to number of desired partitions created on *Wide "shuffles" Transformations*; value varies on things like: 1. data volume & structure, 2. cluster hardware & partition size, 3. cores available, 4. application's intention)
 
@@ -154,5 +154,23 @@ def ram(size: Int): Int = {
 def target(size: Int): Int = {
   val targetMb = size
   return targetMb
+}
+```
+
+2c.) The Spark property `spark.default.parallelism` can help with determining the intial partitioning of a dataframe, as well as, be used to increase Spark parallelism.  Generally it is recommended to set this parameter to the number of cores in your cluster times 2 or 3.  For example, in *Databricks Community Edition* the `spark.default.parallelism` is only 8 (*Local Mode* single machine with 1 Spark executor and 8 total cores).  For real-world scenarios, I recommend you avoid trying to set this application parameter at runtime or in a notebook.  In *Amazon EMR*, you can attach a configuration file when creating the Spark cluster's infrastructure and thus acheive more parallelism using this formula ```spark.default.parallelism = spark.executor.instances * spark.executors.cores * 2 (or 3)```.  For review, the ```spark.executor.instances``` property is the total number of JVM containers across worker nodes.  Each executor has an internal fixed amount of allocated cores set via the ```spark.executor.cores``` property.
+
+*"Cores"* are also known as *"slots"* or *"threads"* and are responsible for executing Spark *"tasks"* in parallel, which are mapped to Spark *"partitions"* also known as a *"chunk of data in a file"*.
+
+Here is official **Apache Spark Documentation** explaining the many properties (https://spark.apache.org/docs/latest/configuration.html).
+
+```scala
+def dp(): Int = {
+  val defaultParallelism  = spark.sparkContext.defaultParallelism
+  return defaultParallelism
+}
+
+def files(dp: Int, multiplier: Int, ram: Int, target: Int): Int = {
+  val maxPartitions = Math.max(dp * multiplier, Math.ceil(ram / target).toInt)
+  return maxPartitions
 }
 ```
