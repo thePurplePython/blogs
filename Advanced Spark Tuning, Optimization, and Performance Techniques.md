@@ -4,7 +4,7 @@
 
 However, in this blog using the native Scala API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark *Structured Streaming* job for gracefully auto-terminating periodic data processed appends of new source data, and 2.) how to control the output size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in *Amazon EMR*).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in *Amazon S3*) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
 
-***Disclaimer:  The public datasets used in this blog contain very small data volumes and are used for demostration purposes only.  These Spark techniques are best suited for real-world big data volumes (i.e. terabytes & petabytes).
+***Disclaimer:  The public datasets used in this blog contain very small data volumes and are used for demostration purposes only.  These Spark techniques are best applied on real-world big data volumes (i.e. terabytes & petabytes).***
 
 ## Example 1: Spark Streaming Transient Termination Timer
 
