@@ -119,7 +119,7 @@ To the next example ...
 
 ## Example 2: Spark Repartition File Size Optimization
 
-2a.) First, let's read our input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to smaller parquet files for demo purposes) and identify the number of partitions in the dataframe.
+2a.) First, let's read our input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to small parquet files for demo purposes) and identify the number of partitions in the dataframe.
 
 ```scala
 import org.apache.spark.sql.DataFrame
