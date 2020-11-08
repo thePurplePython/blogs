@@ -192,7 +192,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 }
 ```
 
-2e.)
+2e.) here
 
 ```scala
 val parquetDf = readParquet("/blogs/source/airlines.parquet/")
