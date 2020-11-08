@@ -8,7 +8,7 @@ However, in this blog using the native Scala API I will walk you through two Spa
 
 ## Example 1: Spark Streaming Transient Termination Timer
 
-1a.) First, let’s view and define the schema for the public IoT device event dataset retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/structured-streaming/events/*.
+1a.) First, let’s view some sample files and define the schema for the public IoT device event dataset retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/structured-streaming/events/*.
 
 ```ls /blogs/source/devices.json/```
 
@@ -121,7 +121,7 @@ To the next example ...
 
 ## Example 2: Spark Repartition File Size Optimization
 
-2a.) First, let's view and read our input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to small parquet files for demo purposes) and identify the number of partitions in the dataframe.
+2a.) First, let's view some sample files and read our input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to small parquet files for demo purposes) and identify the number of partitions in the dataframe.
 
 ```ls /blogs/source/airlines.parquet/```
 
