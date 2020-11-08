@@ -178,3 +178,37 @@ def files(dp: Int, multiplier: Int, ram: Int, target: Int): Int = {
   return maxPartitions
 }
 ```
+
+2d.)  The new dataframe's partition value will be 
+
+```scala
+def split(df: DataFrame, max: Int): DataFrame = {
+  val repartitionDf = df.repartition(max)
+  return repartitionDf
+}
+
+def writeParquet(df: DataFrame, targetPath: String) {
+  return df.write.format("parquet").mode("overwrite").save(targetPath)
+}
+```
+
+2e.)
+
+```scala
+val parquetDf = readParquet("/blogs/source/airlines.parquet/")
+val numPartitions = num(parquetDf)
+val ramMb = ram(3000) // approx. df cache size
+val targetMb = target(128) // approx. partition size (between 50 and 200 mb)
+val defaultParallelism = dp()
+val maxPartitions = files(defaultParallelism, 2, ramMb, targetMb)
+val repartitionDf = split(parquetDf, maxPartitions)
+writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
+```
+
+2f.)
+
+```ls /blogs/optimized/airlines.parquet/```
+
+![2f-airlines-parquet-opt-output.png](../master/images/2f-airlines-parquet-opt-output.png)
+
+In summary, these Spark techniques have worked for me on many occasions when building out highly available and fault tolerant data lakes, resilient machine learning pipelines, cost-effective cloud compute and storage savings, and improved I/O for generating a reusable feature engineering repository.  However, they  may or may not be official best practices within the Spark community.  The benefits will likely depend on your use case.  In addition, exploring these various types of tuning, optimization, and performance techniques have tremendous value and will help you better understand the internals of Spark.  Creativity is one of the best things about open source software and cloud computing for continuous learning and solving real-world problems.  Thank you for reading this blog.
