@@ -127,9 +127,7 @@ To the next example ...
 
 ![2a-airlines-dataset-parquet-input.png](../master/images/2a-airlines-dataset-parquet-input.png)
 
-```scala
-df.show()
-```
+```display(df)```
 
 ![2a-airlines-sample.png](../master/images/2a-airlines-sample.png)
 
