@@ -199,7 +199,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 ```scala
 import org.apache.spark.sql.SparkSession
 
-val spark = SparkSession.builder().appName("spark-repartition-app").getOrCreate()
+val spark = SparkSession.builder().appName("spark-repartition-optimizer-app").getOrCreate()
 val parquetDf = readParquet("/blogs/source/airlines.parquet/")
 val numPartitions = num(parquetDf)
 val ramMb = ram(3000) // approx. df cache size
