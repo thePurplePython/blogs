@@ -97,8 +97,8 @@ def kill(): Unit = {
 import org.apache.spark.sql.SparkSession
 
 val spark = SparkSession.builder().appName("spark-structured-streaming-transient-app").getOrCreate()
-spark.conf.get("spark.sql.session.timeZone", "UTC")
-spark.conf.set("spark.sql.shuffle.partitions", 2001)
+spark.conf.get("spark.sql.session.timeZone", "UTC")  // example
+spark.conf.set("spark.sql.shuffle.partitions", 2001) // example
 val readDf = readStream(10, "/blogs/source/devices.json")
 val triggerDf = writeStream(readDf, 8, "/blogs/recovery/logs.cp", "60 seconds", "/blogs/target/devices.parquet")
 stop(300000) // 300000 ms = 5 min
@@ -200,6 +200,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 import org.apache.spark.sql.SparkSession
 
 val spark = SparkSession.builder().appName("spark-repartition-optimizer-app").getOrCreate()
+spark.conf.set("spark.sql.shuffle.partitions", 2001) // example
 val parquetDf = readParquet("/blogs/source/airlines.parquet/")
 val numPartitions = num(parquetDf)
 val ramMb = ram(3000) // approx. df cache size
