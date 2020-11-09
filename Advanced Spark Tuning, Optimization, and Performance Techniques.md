@@ -194,7 +194,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 }
 ```
 
-2e.)  For demonstration, the cached dataframe is approximately 3000 mb and a desired partition size is 128 mb.  In this example, the calculated partition size *(3,000 dividied by 128=~23)* is greater than the default parallelism multiplier *(8 times 2=16)* hence why the value of 23 was chosen as the repartitioned dataframe's new partition count.
+2e.)  For demonstration, the cached dataframe is approximately 3,000 mb and a desired partition size is 128 mb.  In this example, the calculated partition size *(3,000 dividied by 128=~23)* is greater than the default parallelism multiplier *(8 times 2=16)* hence why the value of 23 was chosen as the repartitioned dataframe's new partition count.
 
 ```scala
 val parquetDf = readParquet("/blogs/source/airlines.parquet/")
