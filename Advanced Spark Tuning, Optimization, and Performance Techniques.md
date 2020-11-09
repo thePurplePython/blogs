@@ -163,7 +163,7 @@ def target(size: Int): Int = {
 
 2c.) The Spark property `spark.default.parallelism` can help with determining the intial partitioning of a dataframe, as well as, be used to increase Spark parallelism.  Generally it is recommended to set this parameter to the number of cores in your cluster times 2 or 3.  For example, in *Databricks Community Edition* the `spark.default.parallelism` is only 8 (*Local Mode* single machine with 1 Spark executor and 8 total cores).  For real-world scenarios, I recommend you avoid trying to set this application parameter at runtime or in a notebook.  In *Amazon EMR*, you can attach a configuration file when creating the Spark cluster's infrastructure and thus acheive more parallelism using this formula ```spark.default.parallelism = spark.executor.instances * spark.executors.cores * 2 (or 3)```.  For review, the ```spark.executor.instances``` property is the total number of JVM containers across worker nodes.  Each executor has an internal fixed amount of allocated cores set via the ```spark.executor.cores``` property.
 
-*"Cores"* are also known as *"slots"* or *"threads"* and are responsible for executing Spark *"tasks"* in parallel, which are mapped to Spark *"partitions"* also known as a *"chunk of data in a file"*.
+*'Cores'* are also known as *'slots'* or *'threads'* and are responsible for executing Spark *'tasks'* in parallel, which are mapped to Spark *'partitions'* also known as a *'chunk of data in a file'*.
 
 Here is official **Apache Spark Documentation** explaining the many properties (https://spark.apache.org/docs/latest/configuration.html).
 
@@ -179,7 +179,7 @@ def files(dp: Int, multiplier: Int, ram: Int, target: Int): Int = {
 }
 ```
 
-2d.)  The new dataframe's partition value will be 
+2d.)  The new dataframe's partition value will be determined on which integer value is larger: *(defaultParallelism times multiplier)* or *(approx. dataframe memory size divided by approx. desired partition size)*.
 
 ```scala
 def split(df: DataFrame, max: Int): DataFrame = {
@@ -192,7 +192,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 }
 ```
 
-2e.) here!
+2e.)  For demonstration, the cached dataframe is approximately 3000 mb and a desired partition size is 128 mb.  In this example, the calculated partition size *(3,000 dividied by 128=~23)* is greater than the default parallelism multiplier *(8 times 2=16)* hence why the value of 23 was chosen as the repartitioned dataframe's new partition count.
 
 ```scala
 val parquetDf = readParquet("/blogs/source/airlines.parquet/")
@@ -205,10 +205,13 @@ val repartitionDf = split(parquetDf, maxPartitions)
 writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
 ```
 
-2f.)
+2f.)  Lastly, we view some sample output partitions and can see there are 23 files (*part-00000* to *part-00022*) approximately 127 mb (~127,000,000 bytes = ~127 mb) each in size, which is close to the set 128 mb target size, as well as, within the optimized 50 to 200 mb recommendation.  Having the same optimized file size across all partitions solves the *'small and skewed files'* problem harming data lake management, storage costs, and analytics I/O performance.  Alternatives include partitioning the data by columns too.  For example, a folder hierachy (i.e. *year / month / day)* containing 1 merged partition per day.  Specifics will vary on use case requirements, data volume, and data structure.
 
 ```ls /blogs/optimized/airlines.parquet/```
 
 ![2f-airlines-parquet-opt-output.png](../master/images/2f-airlines-parquet-opt-output.png)
 
-In summary, these Spark techniques have worked for me on many occasions when building out highly available and fault tolerant data lakes, resilient machine learning pipelines, cost-effective cloud compute and storage savings, and improved I/O for generating a reusable feature engineering repository.  However, they  may or may not be official best practices within the Spark community.  The benefits will likely depend on your use case.  In addition, exploring these various types of tuning, optimization, and performance techniques have tremendous value and will help you better understand the internals of Spark.  Creativity is one of the best things about open source software and cloud computing for continuous learning and solving real-world problems.  Thank you for reading this blog.
+Putting everything in perspective hopefully you can see that Spark properties like ```spark.sql.shuffle.partitions``` and ```spark.default.parallelism``` 
+have a significant impact on the performance of your Spark applications.  It is critical these kind of Spark properties are tuned accordingly to optimize the output number and size of the partitions when processing large datasets across many Spark worker nodes.
+
+In summary, these kind of Spark techniques have worked for me on many occasions when building out highly available and fault tolerant data lakes, resilient machine learning pipelines, cost-effective cloud compute and storage savings, and improved I/O for generating a reusable feature engineering repository.  However, they  may or may not be official best practices within the Spark community.  The benefits will likely depend on your use case.  In addition, exploring these various types of tuning, optimization, and performance techniques have tremendous value and will help you better understand the internals of Spark.  Creativity is one of the best things about open source software and cloud computing for continuous learning and solving real-world problems.  Thank you for reading this blog.
