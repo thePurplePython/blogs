@@ -1,5 +1,7 @@
 ***Advanced Spark Tuning, Optimization, and Performance Techniques***
 
+## Introduction
+
 ***Apache Spark*** is a distributed computing big data analytics framework designed to transform, engineer, and process massive amounts of data (think terabytes and petabytes) across a cluster of machines.  It has a plethora of embedded components for specific tasks including Spark SQL’s Structured DataFrame and Structured Streaming APIs, both which will be discussed in this blog.  One of the challenges with Spark is appending new data to a data lake thus producing *'small and skewed files'* on write.  It can be tricky to solve these challenges completely, which consequently have a negative impact on users performing additional downstream Spark layers, Data Science analysis, and SQL queries consuming the *'small and skewed files'*.  A fairly new framework called ***Delta Lake*** helps address these issues.
 
 However, in this blog using the native Scala API I will walk you through two Spark problem solving techniques of 1.) how to include a transient timer in your Spark *Structured Streaming* job for gracefully auto-terminating periodic data processed appends of new source data, and 2.) how to control the number of output files and the size of the partitions produced by your Spark jobs.  Problem solve #1 capability avoids always paying for a long-running (sometimes idle) *'24/7'* cluster (i.e. in *Amazon EMR*).  For example, short-lived streaming jobs are a solid option for processing only new available source data (i.e. in *Amazon S3*) that does not have a consistent cadence arrival; perhaps landing every hour or so as mini-batches.  Problem solve #2 capability is really important for improving the I/O performance of downstream processes such as next layer Spark jobs, SQL queries, Data Science analysis, and overall data lake metadata management.
@@ -210,6 +212,8 @@ writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
 ```ls /blogs/optimized/airlines.parquet/```
 
 ![2f-airlines-parquet-opt-output.png](../master/images/2f-airlines-parquet-opt-output.png)
+
+## Conclusion
 
 Putting everything in perspective hopefully you can see that Spark properties like ```spark.sql.shuffle.partitions``` and ```spark.default.parallelism``` 
 have a significant impact on the performance of your Spark applications.  It is critical these kind of Spark properties are tuned accordingly to optimize the output number and size of the partitions when processing large datasets across many Spark worker nodes.
