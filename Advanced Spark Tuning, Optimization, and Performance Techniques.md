@@ -211,7 +211,7 @@ val repartitionDf = split(parquetDf, maxPartitions)
 writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
 ```
 
-2f.)  Lastly, we view some sample output partitions and can see there are 23 files (*part-00000* to *part-00022*) approximately 127 mb (~127,000,000 bytes = ~127 mb) each in size, which is close to the set 128 mb target size, as well as, within the optimized 50 to 200 mb recommendation.  Having the same optimized file size across all partitions solves the *'small and skewed files'* problem harming data lake management, storage costs, and analytics I/O performance.  Alternatives include partitioning the data by columns too.  For example, a folder hierachy (i.e. *year / month / day)* containing 1 merged partition per day.  Specifics will vary on use case requirements, data volume, and data structure.
+2f.)  Lastly, we view some sample output partitions and can see there are 23 files (*part-00000* to *part-00022*) approximately 127 mb (~127,000,000 bytes = ~127 mb) each in size, which is close to the set 128 mb target size, as well as, within the optimized 50 to 200 mb recommendation.  Having the same optimized file size across all partitions solves the *'small and skewed files'* problem harming data lake management, storage costs, and analytics I/O performance.  Alternatives include partitioning the data by columns too.  For example, a folder hierachy (i.e. *year / month / day)* containing 1 merged partition per day.  Specific best practices will vary and depend on use case requirements, data volume, and data structure though.
 
 ```ls /blogs/optimized/airlines.parquet/```
 
