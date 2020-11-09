@@ -47,7 +47,7 @@ def readStream(maxFilesPerTrigger: Int, basePath: String): DataFrame = {
 }
 ```
 
-1c.) Now, we execute the streaming query as `parquet` file sink format and `append` mode to ensure only new data is periodically written incrementally as well as include function arguments:
+1c.) Now, we execute the streaming query as `parquet` file sink format and `append` mode to ensure only new data is periodically written incrementally, as well as, include function arguments:
 - *df* (source dataframe)
 - *repartition* (number of persisted output partitions every trigger fire)
 - *checkpointPath* (recovery checkpoint location)
