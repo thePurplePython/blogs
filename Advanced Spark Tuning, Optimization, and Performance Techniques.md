@@ -29,7 +29,7 @@ val schema = (new StructType()
               )
 ```
 
-1b.) Next, we will read the dataset as a streaming dataframe with the schema defined as well as include function arguments:
+1b.) Next, we will read the dataset as a streaming dataframe with the schema defined, as well as, include function arguments:
 - *maxFilesPerTrigger* (number of max files read per trigger)
 - *basePath* (data source location)
 
