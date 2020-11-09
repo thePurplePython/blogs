@@ -89,7 +89,7 @@ def kill(): Unit = {
 }
 ```
 
-1f.) Apply the functions to Scala values, and optionally set additional Spark properties if desired:
+1f.) Apply the functions to Scala values, and optionally set additional Spark properties if needed:
 - `spark.sql.session.timeZone` (set to *UTC* to avoid timestamp and timezone mismatch issues)
 - `spark.sql.shuffle.partitions` (set to number of desired partitions created on *Wide 'shuffles' Transformations*; value varies on things like: 1. data volume & structure, 2. cluster hardware & partition size, 3. cores available, 4. application's intention)
 
@@ -123,7 +123,7 @@ To the next example ...
 
 ## Example 2: Spark Repartition File Size Optimization
 
-2a.) First, let's view some sample files and read our input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to small parquet files for demo purposes) and identify the number of partitions in the dataframe.
+2a.) First, let's view some sample files and read our public airlines input dataset (retrieved from *Databricks Community Edition* stored at *dbfs:/databricks-datasets/airlines/* and converted to small parquet files for demo purposes) and identify the number of partitions in the dataframe.
 
 ```ls /blogs/source/airlines.parquet/```
 
@@ -222,4 +222,4 @@ writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
 In perspective, hopefully you can see that Spark properties like ```spark.sql.shuffle.partitions``` and ```spark.default.parallelism``` 
 have a significant impact on the performance of your Spark applications.  It is critical these kind of Spark properties are tuned accordingly to optimize the output number and size of the partitions when processing large datasets across many Spark worker nodes.
 
-In summary, these kind of Spark techniques have worked for me on many occasions when building out highly available and fault tolerant data lakes, resilient machine learning pipelines, cost-effective cloud compute and storage savings, and optimal I/O for generating a reusable curated feature engineering repository.  However, they may or may not be official best practices within the Spark community.  The benefits will likely depend on your use case.  In addition, exploring these various types of tuning, optimization, and performance techniques have tremendous value and will help you better understand the internals of Spark.  Creativity is one of the best things about open source software and cloud computing for continuous learning and solving real-world problems.  Thank you for reading this blog.
+In summary, these kind of Spark techniques have worked for me on many occasions when building out highly available and fault tolerant data lakes, resilient machine learning pipelines, cost-effective cloud compute and storage savings, and optimal I/O for generating a reusable curated feature engineering repository.  However, they may or may not be official best practices within the Spark community.  The benefits will likely depend on your use case.  In addition, exploring these various types of tuning, optimization, and performance techniques have tremendous value and will help you better understand the internals of Spark.  Creativity is one of the best things about open source software and cloud computing for continuous learning, solving real-world problems, and delivered solutions.  Thank you for reading this blog.
