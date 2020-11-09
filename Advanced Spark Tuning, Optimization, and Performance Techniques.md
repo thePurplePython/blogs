@@ -73,7 +73,7 @@ def writeStream(df: DataFrame, repartition: Int, checkpointPath: String, trigger
 }
 ```
 
-1d.) A Scala sleep function (in miliseconds) will be used to shutdown the streaming job on a graceful transient timer.
+1d.) A Scala sleep function (in milliseconds) will be used to shutdown the streaming job on a graceful transient timer.
 
 ```scala
 def stop(n: Int): Unit = {
@@ -117,7 +117,7 @@ Here is official **Apache Spark Documentation** explaining the steps (https://sp
 
 In AWS, via *Amazon EMR* you can submit applications as job steps and auto-terminate the cluster's infrastructure when all steps complete.  This can be fully orchestrated, automated, and scheduled via services like *AWS Step Functions*, *AWS Lambda*, and *Amazon CloudWatch*.
 
-Sometimes the output file size of a streaming job will be rather *'skewed'* due to a sporadic cadence arrival of the source data, as well as, the timing challenge of always syncing it with the trigger of the streaming job.  Example 2 will help address and optimize the *'small and skewed files'* dilemna.
+Sometimes the output file size of a streaming job will be rather *'skewed'* due to a sporadic cadence arrival of the source data, as well as, the timing challenge of always syncing it with the trigger of the streaming job.  Example 2 will help address and optimize the *'small and skewed files'* dilemma.
 
 To the next example ...
 
@@ -163,7 +163,7 @@ def target(size: Int): Int = {
 }
 ```
 
-2c.) The Spark property `spark.default.parallelism` can help with determining the intial partitioning of a dataframe, as well as, be used to increase Spark parallelism.  Generally it is recommended to set this parameter to the number of cores in your cluster times 2 or 3.  For example, in *Databricks Community Edition* the `spark.default.parallelism` is only 8 (*Local Mode* single machine with 1 Spark executor and 8 total cores).  For real-world scenarios, I recommend you avoid trying to set this application parameter at runtime or in a notebook.  In *Amazon EMR*, you can attach a configuration file when creating the Spark cluster's infrastructure and thus acheive more parallelism using this formula ```spark.default.parallelism = spark.executor.instances * spark.executors.cores * 2 (or 3)```.  For review, the ```spark.executor.instances``` property is the total number of JVM containers across worker nodes.  Each executor has a universal fixed amount of allocated internal cores set via the ```spark.executor.cores``` property.
+2c.) The Spark property `spark.default.parallelism` can help with determining the initial partitioning of a dataframe, as well as, be used to increase Spark parallelism.  Generally it is recommended to set this parameter to the number of cores in your cluster times 2 or 3.  For example, in *Databricks Community Edition* the `spark.default.parallelism` is only 8 (*Local Mode* single machine with 1 Spark executor and 8 total cores).  For real-world scenarios, I recommend you avoid trying to set this application parameter at runtime or in a notebook.  In *Amazon EMR*, you can attach a configuration file when creating the Spark cluster's infrastructure and thus achieve more parallelism using this formula ```spark.default.parallelism = spark.executor.instances * spark.executors.cores * 2 (or 3)```.  For review, the ```spark.executor.instances``` property is the total number of JVM containers across worker nodes.  Each executor has a universal fixed amount of allocated internal cores set via the ```spark.executor.cores``` property.
 
 *'Cores'* are also known as *'slots'* or *'threads'* and are responsible for executing Spark *'tasks'* in parallel, which are mapped to Spark *'partitions'* also known as a *'chunk of data in a file'*.
 
@@ -194,7 +194,7 @@ def writeParquet(df: DataFrame, targetPath: String) {
 }
 ```
 
-2e.)  For demonstration, the cached dataframe is approximately 3,000 mb and a desired partition size is 128 mb.  In this example, the calculated partition size *(3,000 dividied by 128=~23)* is greater than the default parallelism multiplier *(8 times 2=16)* hence why the value of 23 was chosen as the repartitioned dataframe's new partition count.
+2e.)  For demonstration, the cached dataframe is approximately 3,000 mb and a desired partition size is 128 mb.  In this example, the calculated partition size *(3,000 divided by 128=~23)* is greater than the default parallelism multiplier *(8 times 2=16)* hence why the value of 23 was chosen as the repartitioned dataframe's new partition count.
 
 ```scala
 import org.apache.spark.sql.SparkSession
@@ -211,7 +211,7 @@ val repartitionDf = split(parquetDf, maxPartitions)
 writeParquet(repartitionDf, "/blogs/optimized/airlines.parquet/")
 ```
 
-2f.)  Lastly, we view some sample output partitions and can see there are 23 files (*part-00000* to *part-00022*) approximately 127 mb (~127,000,000 bytes = ~127 mb) each in size, which is close to the set 128 mb target size, as well as, within the optimized 50 to 200 mb recommendation.  Having the same optimized file size across all partitions solves the *'small and skewed files'* problem harming data lake management, storage costs, and analytics I/O performance.  Alternatives include partitioning the data by columns too.  For example, a folder hierachy (i.e. *year / month / day)* containing 1 merged partition per day.  Specific best practices will vary and depend on use case requirements, data volume, and data structure though.
+2f.)  Lastly, we view some sample output partitions and can see there are 23 files (*part-00000* to *part-00022*) approximately 127 mb (~127,000,000 bytes = ~127 mb) each in size, which is close to the set 128 mb target size, as well as, within the optimized 50 to 200 mb recommendation.  Having the same optimized file size across all partitions solves the *'small and skewed files'* problem harming data lake management, storage costs, and analytics I/O performance.  Alternatives include partitioning the data by columns too.  For example, a folder hierarchy (i.e. *year / month / day)* containing 1 merged partition per day.  Specific best practices will vary and depend on use case requirements, data volume, and data structure though.
 
 ```ls /blogs/optimized/airlines.parquet/```
 
