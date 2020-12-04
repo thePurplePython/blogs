@@ -1,4 +1,4 @@
-***Orchestrating Transient Data Analytics Workflows via AWS Step Functions***
+***Orchestrating Transient Data Analytics & ML Workflows via AWS Step Functions***
 
 ## Introduction
 
@@ -236,7 +236,7 @@ In summary for this example, you can utilize *Step Functions* to automate and sc
 
 To the next example ...
 
-## Example 2: Apply Batch Transform on Data for Inferencing with a Trained ML Model via Amazon SageMaker
+## Example 2: Apply Batch Transform on Data for Inference with a Trained ML Model via Amazon SageMaker
 
 2a.) For data understanding let's view the raw labeled (dependent variable is the last column named *rings*) training dataset (abalone from the *UCI Machine Learning Repository*) in *S3*.  The trained model predicts age of the abalone (a type of shellfish) from physical measurements. 
 
