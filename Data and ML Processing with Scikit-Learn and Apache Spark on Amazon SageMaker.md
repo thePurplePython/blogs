@@ -211,7 +211,7 @@ spark_python_job.run(
 
 ![2d-spark-python-s3-output-paths.png](../master/images/2d-spark-python-s3-output-paths.png)
 
-```SELECT * FROM s3object s LIMIT 5```
+```SELECT * FROM s3object s LIMIT 1```
 
 ![2d-spark-python-feature-vector-label.png](../master/images/2d-spark-python-feature-vector-label.png)
 
@@ -353,7 +353,7 @@ spark_scala_job.run(
 
 ![3d-spark-scala-s3-output-paths.png](../master/images/3d-spark-scala-s3-output-paths.png)
 
-```SELECT * FROM s3object s LIMIT 5```
+```SELECT * FROM s3object s LIMIT 1```
 
 ![3d-spark-scala-feature-vector-label.png](../master/images/3d-spark-scala-feature-vector-label.png)
 
