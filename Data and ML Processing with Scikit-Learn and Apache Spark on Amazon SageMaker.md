@@ -32,7 +32,7 @@ input_prefix = 'raw-datasets'
 output_prefix = 'sklearn-datasets'
 ```
 
-2a.) Next, initialize the appropriate class instance (i.e. ```SKLearnProcessor``` ) with any additional parameters.
+1b.) Next, initialize the appropriate class instance (i.e. ```SKLearnProcessor``` ) with any additional parameters.
 
 ```python
 sklearn_job = SKLearnProcessor(
@@ -44,7 +44,7 @@ sklearn_job = SKLearnProcessor(
 )
 ```
 
-3a.) Now, execute the job with appropriate input(s), output(s), and argument(s).  For example, this job reads raw data stored in S3, splits data into train and test sets, performs feature engineering, and writes to storage (copied from internal EC2 local EBS volume to external S3).
+1c.) Now, execute the job with appropriate input(s), output(s), and argument(s).  For example, this job reads raw data stored in S3, splits data into train and test sets, performs feature engineering, and writes to storage (copied from internal EC2 local EBS volume to external S3).
 
 ```python
 sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-processing.py'),
@@ -62,7 +62,7 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
                )
 ```
 
-4a.) Confirm and view the S3 output results (features, labels) via AWS CLI and S3 Select Query.
+1d.) Confirm and view the S3 output results (features, labels) via AWS CLI and S3 Select Query.
 
 ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/```
 
@@ -76,7 +76,7 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
 
 ![4a-sklearn-labels.png](../master/images/4a-sklearn-labels.png)
 
-5a.)  For reference, here is the complete script (```sklearn-processing.py```) I developed that is being called by SageMaker in this example.
+1e.)  For reference, here is the complete script (```sklearn-processing.py```) I developed that is being called by SageMaker in this example.
 
 ```python
 # mods
@@ -161,5 +161,9 @@ if __name__ == '__main__':
 ```
 
 ## Example 2: Spark Python SageMaker Processing
+
+2a.) First, import dependencies and optionally set S3 bucket/prefixes if desired.
+
+
 
 ## Example 3: Spark Scala SageMaker Processing
