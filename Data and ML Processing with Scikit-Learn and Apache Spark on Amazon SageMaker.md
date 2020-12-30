@@ -128,14 +128,14 @@ def main():
                                                     random_state=0)
     
     # pipeline
-    num_features = df.select_dtypes(include='float64').columns.drop('rings').tolist()
     cat_features = df.select_dtypes(include='category').columns.tolist()
-    num_transformer = Pipeline(steps=[
-        ('num_imputer', SimpleImputer(strategy='median')),
-        ('num_scaler', StandardScaler())])
+    num_features = df.select_dtypes(include='float64').columns.drop('rings').tolist()
     cat_transformer = Pipeline(steps=[
         ('cat_imputer', SimpleImputer(strategy='constant', fill_value='missing')),
         ('cat_ohe', OneHotEncoder(handle_unknown='ignore'))])
+    num_transformer = Pipeline(steps=[
+        ('num_imputer', SimpleImputer(strategy='median')),
+        ('num_scaler', StandardScaler())])
     feature_eng_pipeline = ColumnTransformer(transformers=[
         ('cat', cat_transformer, cat_features),
         ('num', num_transformer, num_features)])
