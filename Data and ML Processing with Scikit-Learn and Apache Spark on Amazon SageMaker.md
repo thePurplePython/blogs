@@ -205,7 +205,7 @@ spark_python_job.run(
 )
 ```
 
-3d.) Confirm and view the S3 output results (features + label dataframe) via AWS CLI and S3 Select Query.
+3d.) Confirm and view the S3 output results (features + label dataframes) via AWS CLI and S3 Select Query.
 
 ```aws s3 --recursive ls s3://sagemaker-processing-examples/spark-python-datasets/```
 
@@ -347,7 +347,7 @@ spark_scala_job.run(
 )
 ```
 
-3d.) Confirm and view the S3 output results (features + label dataframe) via AWS CLI and S3 Select Query.
+3d.) Confirm and view the S3 output results (features + label dataframes) via AWS CLI and S3 Select Query.
 
 ```aws s3 --recursive ls s3://sagemaker-processing-examples/spark-scala-datasets/```
 
