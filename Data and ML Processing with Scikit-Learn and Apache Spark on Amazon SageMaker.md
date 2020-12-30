@@ -10,11 +10,13 @@ SageMaker fully supports deploying customized data processing jobs for ML pipeli
 
 In this blog using SageMaker Processing I will walk you through examples of how to deploy a customized data processing and feature engineering script on Amazon SageMaker via 1.) *SKLearn*, 2.) *Spark Python*, and 3.) *Spark Scala*.
 
-The public dataset used for these demonstrations is available here: https://archive.ics.uci.edu/ml/datasets/abalone
+The public dataset used for these demonstrations is available here:
+
+https://archive.ics.uci.edu/ml/datasets/abalone
 
 Each script will perform some basic feature engineering techniques.  First, as a best practice, the dataset will be split into train and test sets for model evaluation and preventative feature extraction leakage.  For categorical predictor variables, *One Hot Encoding*, will be implemented.  For numeric predictor variables, *Standard Scaler*, will be implemented.  It is important to note to perform both a ```.fit()``` and ```.transform()``` on the train set however only a ```.transform()``` on the test set.  This ensures the trained model will not include any bias, as well as, avoids learning/computing a new mean/variance on the unseen features in the test set.  This is a critical step to implement properly as each slice of the data serves a particular purpose in the pipeline.  Specifically, *Train* set (used to train model), *Validation* set (used to tune, estimate performance, and compare multiple models), and *Test* set (evaluate predictive strength of model).
 
-**Disclaimer: The public datasets and EC2 instance types used in this blog contain very small data volumes and compute sizes.  Therefore, they are being used for demonstration purposes and cost savings only.  Size, configure, and tune infrastructure & applications accordingly.**
+***Disclaimer: The public datasets and EC2 instance types used in this blog contain very small data volumes and compute sizes.  Therefore, they are being used for demonstration purposes and cost savings only.  Size, configure, and tune infrastructure & applications accordingly.***
 
 ## Example 1: SKLearn SageMaker Processing
 
