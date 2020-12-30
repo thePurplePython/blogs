@@ -32,6 +32,40 @@ input_prefix = 'raw-datasets'
 output_prefix = 'sklearn-datasets'
 ```
 
+2a.) Next, initialize the appropriate class instance (i.e. ```SKLearnProcessor``` ) with any additional parameters.
+
+```python
+sklearn_job = SKLearnProcessor(
+    framework_version='0.23-1',
+    role=sagemaker.get_execution_role(),
+    instance_type='ml.m5.xlarge',
+    instance_count=1,
+    base_job_name='sklearn-sagemaker-processing-example'
+)
+```
+
+3a.) Now, execute the job with appropriate input(s), output(s), and argument(s).  For example, this job reads raw data from S3, splits data into train and test sets, performs feature engineering, and writes to storage (copied from internal EC2 local EBS volume to external S3).
+
+```python
+sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-processing.py'),
+                inputs=[ProcessingInput(
+                    input_name='raw',
+                    source='s3://' + os.path.join(bucket, input_prefix, 'abalone.csv'),
+                    destination='/opt/ml/processing/input')],
+                outputs=[ProcessingOutput(output_name='train-dataset',
+                                          source='/opt/ml/processing/output/train',
+                                          destination='s3://' + os.path.join(bucket, output_prefix, 'train')),
+                         ProcessingOutput(output_name='test-dataset',
+                                          source='/opt/ml/processing/output/test',
+                                          destination='s3://' + os.path.join(bucket, output_prefix, 'test'))],
+                arguments=['--train-split-size', '0.80', '--test-split-size', '0.20']
+               )
+```
+
+4a.) Confirm and view the output results (features, labels) via *AWS CLI* ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/``` and *S3 Select Query* ```SELECT * FROM s3object s LIMIT 5```.
+
+
+
 ## Example 2: Spark Python SageMaker Processing
 
 ## Example 3: Spark Scala SageMaker Processing
