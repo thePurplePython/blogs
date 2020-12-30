@@ -131,14 +131,12 @@ def main():
     cat_features = df.select_dtypes(include='category').columns.tolist()
     num_features = df.select_dtypes(include='float64').columns.drop('rings').tolist()
     cat_transformer = Pipeline(steps=[
-        ('cat_imputer', SimpleImputer(strategy='constant', fill_value='missing')),
         ('cat_ohe', OneHotEncoder(handle_unknown='ignore'))])
     num_transformer = Pipeline(steps=[
-        ('num_imputer', SimpleImputer(strategy='median')),
         ('num_scaler', StandardScaler())])
     feature_eng_pipeline = ColumnTransformer(transformers=[
         ('cat', cat_transformer, cat_features),
-        ('num', num_transformer, num_features)])
+        ('num', num_transformer, num_features)])    
     
     # fit model
     train_features = feature_eng_pipeline.fit_transform(X_train)
