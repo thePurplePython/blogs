@@ -103,15 +103,15 @@ features = [
     'shell_weight']
 labels = 'rings'
 features_types = {
-    'sex': "category",
-    'length': "float64",
-    'diameter': "float64",
-    'height': "float64",
-    'whole_weight': "float64",
-    'shucked_weight': "float64",
-    'viscera_weight': "float64",
-    'shell_weight': "float64"}
-labels_type = {'rings': "float64"}
+    'sex': 'category',
+    'length': 'float64',
+    'diameter': 'float64',
+    'height': 'float64',
+    'whole_weight': 'float64',
+    'shucked_weight': 'float64',
+    'viscera_weight': 'float64',
+    'shell_weight': 'float64'}
+labels_type = {'rings': 'float64'}
 
 def main():
     
@@ -156,7 +156,7 @@ def main():
     pd.DataFrame(test_features).to_csv((os.path.join('/opt/ml/processing/output/test', 'test_features.csv')), header=False, index=False)
     pd.DataFrame(y_test).to_csv((os.path.join('/opt/ml/processing/output/test', 'test_labels.csv')), header=False, index=False)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 ```
 
