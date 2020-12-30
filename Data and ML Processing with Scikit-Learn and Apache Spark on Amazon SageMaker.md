@@ -18,6 +18,20 @@ Each script will perform some basic feature engineering techniques.  First, as a
 
 ## Example 1: SKLearn SageMaker Processing
 
+1a.) First, import dependencies and optionally set S3 bucket/prefixes if desired.
+
+```python
+import os
+import sagemaker
+from sagemaker.sklearn.processing import SKLearnProcessor
+from sagemaker.processing import ProcessingInput, ProcessingOutput
+
+bucket = 'sagemaker-processing-examples'
+code_prefix = 'scripts'
+input_prefix = 'raw-datasets'
+output_prefix = 'sklearn-datasets'
+```
+
 ## Example 2: Spark Python SageMaker Processing
 
 ## Example 3: Spark Scala SageMaker Processing
