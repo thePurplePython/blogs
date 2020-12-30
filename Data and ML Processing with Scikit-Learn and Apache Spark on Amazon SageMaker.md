@@ -68,7 +68,7 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
 
 ![4a-sklearn-labels.png](../master/images/4a-sklearn-labels.png)
 
-5a.)  Here is the complete script I developed for reference.
+5a.)  For reference, here is the complete script (```sklearn-processing.py```) I developed that is being called by SageMaker in this example.
 
 ```python
 # mods
