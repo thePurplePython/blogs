@@ -68,6 +68,92 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
 
 ![4a-sklearn-labels.png](../master/images/4a-sklearn-labels.png)
 
+5a.)  Here is the complete script I developed for reference.
+
+```python
+# mods
+import os
+import argparse
+import pandas as pd
+import numpy as np
+import sklearn as sk
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+# schema
+features = [
+    'sex',
+    'length',
+    'diameter',
+    'height',
+    'whole_weight',
+    'shucked_weight',
+    'viscera_weight',
+    'shell_weight']
+labels = 'rings'
+features_types = {
+    'sex': "category",
+    'length': "float64",
+    'diameter': "float64",
+    'height': "float64",
+    'whole_weight': "float64",
+    'shucked_weight': "float64",
+    'viscera_weight': "float64",
+    'shell_weight': "float64"}
+labels_type = {'rings': "float64"}
+
+def main():
+    
+    # args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--train-split-size', type=float)
+    parser.add_argument('--test-split-size', type=float)
+    args = parser.parse_args()
+    
+    # read dataset
+    df = pd.read_csv((os.path.join('/opt/ml/processing/input', 'abalone.csv')),
+                     header=None,
+                     names=features+[labels],
+                     dtype={**features_types, **labels_type})
+    
+    # split dataset
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('rings', axis=1),
+                                                    df['rings'],
+                                                    train_size=args.train_split_size,
+                                                    test_size=args.test_split_size,
+                                                    shuffle=True,
+                                                    random_state=0)
+    
+    # pipeline
+    num_features = df.select_dtypes(include='float64').columns.drop('rings').tolist()
+    cat_features = df.select_dtypes(include='category').columns.tolist()
+    num_transformer = Pipeline(steps=[
+        ('num_imputer', SimpleImputer(strategy='median')),
+        ('num_scaler', StandardScaler())])
+    cat_transformer = Pipeline(steps=[
+        ('cat_imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+        ('cat_ohe', OneHotEncoder(handle_unknown='ignore'))])
+    feature_eng_pipeline = ColumnTransformer(transformers=[
+        ('cat', cat_transformer, cat_features),
+        ('num', num_transformer, num_features)])
+    
+    # fit model
+    train_features = feature_eng_pipeline.fit_transform(X_train)
+    test_features = feature_eng_pipeline.transform(X_test)
+    
+    # write
+    pd.DataFrame(train_features).to_csv((os.path.join('/opt/ml/processing/output/train', 'train_features.csv')), header=False, index=False)
+    pd.DataFrame(y_train).to_csv((os.path.join('/opt/ml/processing/output/train', 'train_labels.csv')), header=False, index=False)
+    pd.DataFrame(test_features).to_csv((os.path.join('/opt/ml/processing/output/test', 'test_features.csv')), header=False, index=False)
+    pd.DataFrame(y_test).to_csv((os.path.join('/opt/ml/processing/output/test', 'test_labels.csv')), header=False, index=False)
+
+if __name__ == "__main__":
+    main()
+```
+
 ## Example 2: Spark Python SageMaker Processing
 
 ## Example 3: Spark Scala SageMaker Processing
