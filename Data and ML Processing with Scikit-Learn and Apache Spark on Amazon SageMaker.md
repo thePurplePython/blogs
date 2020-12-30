@@ -18,6 +18,6 @@ Each script will perform some basic feature engineering techniques.  First, as a
 
 ## Example 1: SKLearn SageMaker Processing
 
-# Example 2: Spark Python SageMaker Processing
+## Example 2: Spark Python SageMaker Processing
 
 ## Example 3: Spark Scala SageMaker Processing
