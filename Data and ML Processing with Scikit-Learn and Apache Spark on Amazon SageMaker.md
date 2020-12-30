@@ -205,7 +205,7 @@ spark_python_job.run(
 )
 ```
 
-2d.) Confirm and view the S3 output results (features, labels) via AWS CLI and S3 Select Query.
+3d.) Confirm and view the S3 output results (features + label dataframe) via AWS CLI and S3 Select Query.
 
 ```aws s3 --recursive ls s3://sagemaker-processing-examples/spark-python-datasets/```
 
@@ -302,3 +302,151 @@ if __name__ == '__main__':
 ```
 
 ## Example 3: Spark Scala SageMaker Processing
+
+3a.) First, import dependencies and optionally set S3 bucket/prefixes if desired.
+
+```python
+import os
+import sagemaker
+from sagemaker.spark.processing import SparkJarProcessor
+
+bucket = 'sagemaker-processing-examples'
+code_prefix = 'scripts'
+logs_prefix = 'logs'
+input_prefix = 'raw-datasets'
+output_prefix = 'spark-scala-datasets'
+```
+
+3b.) Next, initialize the appropriate class instance (i.e. ```SparkJarProcessor``` ) with any additional parameters.
+
+```python
+spark_scala_job = SparkJarProcessor(
+    framework_version='2.4',
+    role=sagemaker.get_execution_role(),
+    instance_type='ml.m5.xlarge',
+    instance_count=2, # multiple machine distributed computing
+    base_job_name='spark-scala-sagemaker-processing-example'
+)
+```
+
+3c.) Now, execute the job with appropriate argument(s).  For example, this job reads raw data stored in S3, splits data into train and test sets, performs feature engineering, and writes to S3 storage.  ***Please note the Spark Scala application jar file was compiled via SBT build tool***.
+
+```python
+spark_scala_job.run(
+    submit_app='s3://' + os.path.join(bucket, code_prefix, 'spark-scala-processing_2.11-1.0.jar'),
+    submit_class='sparkScalaSageMakerProcessing',
+    arguments=[bucket,
+               input_prefix,
+               '0.80',
+               '0.20',
+               bucket,
+               output_prefix,
+               '1'],
+    spark_event_logs_s3_uri='s3://' + os.path.join(bucket, logs_prefix, 'spark-app-logs'),
+    logs=False
+)
+```
+
+3d.) Confirm and view the S3 output results (features + label dataframe) via AWS CLI and S3 Select Query.
+
+```aws s3 --recursive ls s3://sagemaker-processing-examples/spark-scala-datasets/```
+
+![3d-spark-scala-s3-output-paths.png](../master/images/3d-spark-scala-s3-output-paths.png)
+
+```SELECT * FROM s3object s LIMIT 5```
+
+![3d-spark-scala-feature-vector-label.png](../master/images/3d-spark-scala-feature-vector-label.png)
+
+3e.)  For reference, here is the complete script (```spark-scala-processing.scala```) I developed that is being called by SageMaker in this example.
+
+```scala
+// mods
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
+import org.apache.spark.ml.feature.{StringIndexer, OneHotEncoder, StandardScaler, VectorAssembler}
+
+object sparkScalaSageMakerProcessing {
+    
+    def main(args: Array[String]) {
+        
+        // args
+        val s3InputBucket = args(0)
+        val s3InputPrefix = args(1)
+        val trainSplitSize = args(2).toFloat
+        val testSplitSize = args(3).toFloat
+        val s3OutputBucket = args(4)
+        val s3OutputPrefix = args(5)
+        val repartitionNum = args(6).toInt
+        
+        // create app
+        val spark = SparkSession.builder().appName("spark-scala-sagemaker-processing").getOrCreate()
+        
+        import spark.implicits._
+
+        // schema
+        val schema = (new StructType()
+                      .add("sex", StringType, true)
+                      .add("length", DoubleType, true)
+                      .add("diameter", DoubleType, true)
+                      .add("height", DoubleType, true)
+                      .add("whole_weight", DoubleType, true)
+                      .add("shucked_weight", DoubleType, true)
+                      .add("viscera_weight", DoubleType, true)
+                      .add("shell_weight", DoubleType, true)
+                      .add("rings", DoubleType, true)
+                     )
+        
+        // read dataset
+        val df = (spark
+                  .read
+                  .format("csv")
+                  .option("header", "false")
+                  .schema(schema)
+                  .load("s3://" + s3InputBucket + "/" + s3InputPrefix + "/" + "abalone.csv"))
+        
+        // split dataset
+        val Array(trainDf, testDf) = df.randomSplit(Array[Double](trainSplitSize, testSplitSize), seed=0)
+        
+        // pipeline
+        val inx = (new StringIndexer().setInputCol("sex").setOutputCol("sex_index"))
+        val ohe = (new OneHotEncoder().setInputCol("sex_index").setOutputCol("sex_ohe"))
+        val va1 = (new VectorAssembler().setInputCols(Array("length",
+                                                            "diameter",
+                                                            "height",
+                                                            "whole_weight",
+                                                            "shucked_weight",
+                                                            "viscera_weight",
+                                                            "shell_weight"))
+                   .setOutputCol("concats"))
+        val ssr = (new StandardScaler().setInputCol("concats").setOutputCol("scales"))
+        val va2 = (new VectorAssembler().setInputCols(Array("sex_ohe", "scales")).setOutputCol("features"))
+        val pl = (new Pipeline().setStages(Array(inx, ohe, va1, ssr, va2)))        
+        
+        // fit model
+        val featureEngModel = pl.fit(trainDf)
+        val trainFeaturesDf = featureEngModel.transform(trainDf).select("features", "rings")
+        val testFeaturesDf = featureEngModel.transform(testDf).select("features", "rings")
+        
+        // write
+        (trainFeaturesDf
+         .repartition(repartitionNum)
+         .write
+         .format("parquet")
+         .mode("overwrite")
+         .save("s3://" + s3OutputBucket + "/" + s3OutputPrefix + "/" + "train" + "/" + "train.parquet"))
+        (testFeaturesDf
+         .repartition(repartitionNum)
+         .write
+         .format("parquet")
+         .mode("overwrite")
+         .save("s3://" + s3OutputBucket + "/" + s3OutputPrefix + "/" + "test" + "/" + "test.parquet"))
+   
+        // kill app
+        spark.stop()
+    }
+}
+```
+
+## Conclusion
+
