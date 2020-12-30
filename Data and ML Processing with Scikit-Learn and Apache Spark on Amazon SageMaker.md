@@ -449,3 +449,7 @@ object sparkScalaSageMakerProcessing {
 ```
 
 ## Conclusion
+
+This blog covers the essentials of getting started with SageMaker Processing via SKLearn and Spark.  SageMaker Processing also supports customized Spark tuning and configuration settings (i.e. ```spark.executor.cores```, ```spark.executor.memory```, etc.) via the ```configuration``` parameter that accepts a ```list[dict]``` or ```dict``` passed during the ```run()``` command.  Here is the official **Amazon SageMaker Processing Class Documentation** (https://sagemaker.readthedocs.io/en/stable/amazon_sagemaker_processing.html#learn-more).
+
+AWS recently announced at re:Invent 2020 a few new SageMaker data preparation features including *Data Wrangler*, *Feature Store*, and *Clarify*.  Here is the official **Amazon SageMaker Features Documentation** (https://aws.amazon.com/sagemaker/features/).  Thank you for reading this blog.
