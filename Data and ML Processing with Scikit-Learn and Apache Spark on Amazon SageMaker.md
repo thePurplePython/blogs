@@ -39,7 +39,7 @@ sklearn_job = SKLearnProcessor(
     framework_version='0.23-1',
     role=sagemaker.get_execution_role(),
     instance_type='ml.m5.xlarge',
-    instance_count=1,
+    instance_count=1, # single machine computing
     base_job_name='sklearn-sagemaker-processing-example'
 )
 ```
@@ -183,7 +183,7 @@ spark_python_job = PySparkProcessor(
     framework_version='2.4',
     role=sagemaker.get_execution_role(),
     instance_type='ml.m5.xlarge',
-    instance_count=2,
+    instance_count=2, # multiple machine distributed computing
     base_job_name='spark-python-sagemaker-processing-example'
 )
 ```
@@ -217,7 +217,7 @@ spark_python_job.run(
 
 2e.)  For reference, here is the complete script (```spark-python-processing.py```) I developed that is being called by SageMaker in this example.
 
-```spark
+```python
 # mods
 import os
 import argparse
@@ -300,7 +300,5 @@ def main():
 if __name__ == '__main__':
     main()
 ```
-
-
 
 ## Example 3: Spark Scala SageMaker Processing
