@@ -66,15 +66,15 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
 
 ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/```
 
-![4a-sklearn-s3-output-paths.png](../master/images/4a-sklearn-s3-output-paths.png)
+![1d-sklearn-s3-output-paths.png](../master/images/1d-sklearn-s3-output-paths.png)
 
 ```SELECT * FROM s3object s LIMIT 5```
 
-![4a-sklearn-features.png](../master/images/4a-sklearn-features.png)
+![1d-sklearn-features.png](../master/images/1d-sklearn-features.png)
 
 ```SELECT * FROM s3object s LIMIT 5```
 
-![4a-sklearn-labels.png](../master/images/4a-sklearn-labels.png)
+![1d-sklearn-labels.png](../master/images/1d-sklearn-labels.png)
 
 1e.)  For reference, here is the complete script (```sklearn-processing.py```) I developed that is being called by SageMaker in this example.
 
@@ -163,6 +163,143 @@ if __name__ == '__main__':
 ## Example 2: Spark Python SageMaker Processing
 
 2a.) First, import dependencies and optionally set S3 bucket/prefixes if desired.
+
+```python
+import os
+import sagemaker
+from sagemaker.spark.processing import PySparkProcessor
+
+bucket = 'sagemaker-processing-examples'
+code_prefix = 'scripts'
+logs_prefix = 'logs'
+input_prefix = 'raw-datasets'
+output_prefix = 'spark-python-datasets'
+```
+
+2b.) Next, initialize the appropriate class instance (i.e. ```PySparkProcessor``` ) with any additional parameters.
+
+```python
+spark_python_job = PySparkProcessor(
+    framework_version='2.4',
+    role=sagemaker.get_execution_role(),
+    instance_type='ml.m5.xlarge',
+    instance_count=2,
+    base_job_name='spark-python-sagemaker-processing-example'
+)
+```
+
+2c.) Now, execute the job with appropriate argument(s).  For example, this job reads raw data stored in S3, splits data into train and test sets, performs feature engineering, and writes to S3 storage.
+
+```python
+spark_python_job.run(
+    submit_app='s3://' + os.path.join(bucket, code_prefix, 'spark-python-processing.py'),
+    arguments=['--s3-input-bucket', bucket,
+               '--s3-input-prefix', input_prefix,
+               '--train-split-size', '0.80',
+               '--test-split-size', '0.20',
+               '--s3-output-bucket', bucket,
+               '--s3-output-prefix', output_prefix,
+               '--repartition-num', '1'],
+    spark_event_logs_s3_uri='s3://' + os.path.join(bucket, logs_prefix, 'spark-app-logs'),
+    logs=False
+)
+```
+
+2d.) Confirm and view the S3 output results (features, labels) via AWS CLI and S3 Select Query.
+
+```aws s3 --recursive ls s3://sagemaker-processing-examples/spark-python-datasets/```
+
+![2d-spark-python-s3-output-paths.png](../master/images/2d-spark-python-s3-output-paths.png)
+
+```SELECT * FROM s3object s LIMIT 5```
+
+![2d-spark-python-feature-vector-label.png](../master/images/2d-spark-python-feature-vector-label.png)
+
+2e.)  For reference, here is the complete script (```spark-python-processing.py```) I developed that is being called by SageMaker in this example.
+
+```spark
+# mods
+import os
+import argparse
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.ml import Pipeline
+from pyspark.sql.types import DoubleType, StringType, StructField, StructType
+from pyspark.ml.feature import StringIndexer, OneHotEncoder, StandardScaler, VectorAssembler
+
+# create app
+spark = SparkSession.builder.appName('spark-python-sagemaker-processing').getOrCreate()
+
+# schema
+schema = StructType([StructField('sex', StringType(), True), 
+                     StructField('length', DoubleType(), True),
+                     StructField('diameter', DoubleType(), True),
+                     StructField('height', DoubleType(), True),
+                     StructField('whole_weight', DoubleType(), True),
+                     StructField('shucked_weight', DoubleType(), True),
+                     StructField('viscera_weight', DoubleType(), True), 
+                     StructField('shell_weight', DoubleType(), True), 
+                     StructField('rings', DoubleType(), True)])
+
+def main():
+    
+    #args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--s3-input-bucket', type=str)
+    parser.add_argument('--s3-input-prefix', type=str)
+    parser.add_argument('--train-split-size', type=float)
+    parser.add_argument('--test-split-size', type=float)
+    parser.add_argument('--s3-output-bucket', type=str)
+    parser.add_argument('--s3-output-prefix', type=str)
+    parser.add_argument('--repartition-num', type=int)
+    args = parser.parse_args()
+    
+    # read dataset
+    df = spark.read.csv(('s3://' + os.path.join(args.s3_input_bucket, args.s3_input_prefix, 'abalone.csv')),
+                        header=False,
+                        schema=schema)
+    
+    # split dataset
+    (train_df, test_df) = df.randomSplit([args.train_split_size, args.test_split_size], seed=0)
+    
+    # pipeline
+    inx = StringIndexer(inputCol='sex', outputCol='sex_index')
+    ohe = OneHotEncoder(inputCol='sex_index', outputCol='sex_ohe')
+    va1 = VectorAssembler(inputCols=['length',
+                                     'diameter',
+                                     'height',
+                                     'whole_weight',
+                                     'shucked_weight',
+                                     'viscera_weight',
+                                     'shell_weight'],
+                          outputCol='concats')
+    ssr = StandardScaler(inputCol='concats', outputCol='scales')
+    va2 = VectorAssembler(inputCols=['sex_ohe', 'scales'], outputCol='features')
+    pl = Pipeline(stages=[inx, ohe, va1, ssr, va2])
+    
+    # fit model
+    feature_eng_model = pl.fit(train_df)
+    train_features_df = feature_eng_model.transform(train_df).select('features', 'rings')
+    test_features_df = feature_eng_model.transform(test_df).select('features', 'rings')
+    
+    # write
+    (train_features_df
+    .repartition(args.repartition_num)
+    .write
+    .mode('overwrite')
+    .parquet(('s3://' + os.path.join(args.s3_output_bucket, args.s3_output_prefix, 'train', 'train.parquet'))))
+    (test_features_df
+    .repartition(args.repartition_num)
+    .write
+    .mode('overwrite')
+    .parquet(('s3://' + os.path.join(args.s3_output_bucket, args.s3_output_prefix, 'test', 'test.parquet'))))
+    
+    # kill app
+    spark.stop()
+
+if __name__ == '__main__':
+    main()
+```
 
 
 
