@@ -62,7 +62,7 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
                )
 ```
 
-4a.) Confirm and view the output results (features, labels) via AWS CLI ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/``` and S3 Select Query ```SELECT * FROM s3object s LIMIT 5```.
+4a.) Confirm and view the S3 output results (features, labels) via AWS CLI ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/``` and S3 Select Query ```SELECT * FROM s3object s LIMIT 5```.
 
 ![4a-sklearn-features.png](../master/images/4a-sklearn-features.png)
 
