@@ -6,7 +6,7 @@ Data processing (i.e. cleaning, preparing, transforming or curating) is an essen
 
 Here is official **Amazon SageMaker Processing Documentation** on all current available features (https://sagemaker.readthedocs.io/en/stable/amazon_sagemaker_processing.html, https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html).
 
-SageMaker fully supports deploying customized data processing jobs for ML pipelines via **SageMaker Python SDK**.  For building, SageMaker has pre-built SKLearn/Spark docker images (fully managed running on ***Amazon EC2***).  With SKLearn scripts, the main *SageMaker Class* is ```sagemaker.sklearn.processing.SKLearnProcessor```.  With Spark scripts, the main *SageMaker Classes* are ```sagemaker.spark.processing.PySparkProcessor``` (Python) and ```sagemaker.spark.processing.SparkJarProcessor``` (Scala).
+SageMaker fully supports deploying customized data processing jobs for ML pipelines via SageMaker Python SDK.  For building, SageMaker has pre-built SKLearn/Spark docker images (fully managed running on Amazon EC2).  With SKLearn scripts, the main *SageMaker Class* is ```sagemaker.sklearn.processing.SKLearnProcessor```.  With Spark scripts, the main *SageMaker Classes* are ```sagemaker.spark.processing.PySparkProcessor``` (Python) and ```sagemaker.spark.processing.SparkJarProcessor``` (Scala).
 
 In this blog using SageMaker Processing I will walk you through examples of how to deploy a customized data processing and feature engineering script on Amazon SageMaker via 1.) *SKLearn*, 2.) *Spark Python*, and 3.) *Spark Scala*.
 
@@ -44,7 +44,7 @@ sklearn_job = SKLearnProcessor(
 )
 ```
 
-3a.) Now, execute the job with appropriate input(s), output(s), and argument(s).  For example, this job reads raw data from S3, splits data into train and test sets, performs feature engineering, and writes to storage (copied from internal EC2 local EBS volume to external S3).
+3a.) Now, execute the job with appropriate input(s), output(s), and argument(s).  For example, this job reads raw data stored in S3, splits data into train and test sets, performs feature engineering, and writes to storage (copied from internal EC2 local EBS volume to external S3).
 
 ```python
 sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-processing.py'),
@@ -62,7 +62,7 @@ sklearn_job.run(code='s3://' + os.path.join(bucket, code_prefix, 'sklearn-proces
                )
 ```
 
-4a.) Confirm and view the output results (features, labels) via *AWS CLI* ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/``` and *S3 Select Query* ```SELECT * FROM s3object s LIMIT 5```.
+4a.) Confirm and view the output results (features, labels) via AWS CLI ```aws s3 --recursive ls s3://sagemaker-processing-examples/sklearn-datasets/``` and S3 Select Query ```SELECT * FROM s3object s LIMIT 5```.
 
 
 
