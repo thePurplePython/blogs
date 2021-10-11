@@ -1,0 +1,4 @@
+# The Fundamentals of Data Warehouse + Data Lake = Lake House
+
+Introduction
+With the evolution of Data Warehouses and Data Lakes, they have certainly become more specialized yet siloed in their respective landscapes over the last few years. Both data management technologies each have their own identities and are best used for certain tasks and needs, however they also struggle in providing some important abilities. Data Warehouse advantages are focused around analyzing structured data, OLTP, schema-on-write, SQL, and delivering ACID-compliant database transactions. Data Lake advantages are focused around analyzing all types of data (structured, semi-structured, unstructured), OLAP, schema-on-read, API connectivity, and low-cost object storage systems for data in open file formats (i.e. Apache Parquet).
