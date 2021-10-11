@@ -1,6 +1,6 @@
 ***The Fundamentals of Data Warehouse + Data Lake = Lake House***
 
-# Introduction
+## Introduction
 With the evolution of Data Warehouses and Data Lakes, they have certainly become more specialized yet siloed in their respective landscapes over the last few years. Both data management technologies each have their own identities and are best used for certain tasks and needs, however they also struggle in providing some important abilities. Data Warehouse advantages are focused around analyzing structured data, OLTP, schema-on-write, SQL, and delivering ACID-compliant database transactions. Data Lake advantages are focused around analyzing all types of data (structured, semi-structured, unstructured), OLAP, schema-on-read, API connectivity, and low-cost object storage systems for data in open file formats (i.e. Apache Parquet).
 
 Notably, Data Warehouses particularly struggle with support for advanced data engineering, data science, and machine learning. For example, their inability to store unstructured data (i.e. text, images, video, feature engineering vectors, etc.) for machine learning development. In addition, proprietary Data Warehouse software are expensive and struggle with integrating open source + cloud platform data science and data engineering tools (i.e. Python, Scala, Spark, SageMaker, Anaconda, DataRobot, SAS, R, etc.) for exploratory data analysis via notebooks, distributed compute processing, hosting deployed models, and storing inference pipeline results. System integration, data movement costs, and data staleness will even become more challenging (especially with limited technology choices at your disposal) to address in a hybrid on-premise cloud environment.
@@ -11,7 +11,7 @@ Strategically, integrating and unifying a Data Warehouse and Data Lake becomes a
 
 Databricks is the industry leader and original creator of Lakehouse architecture (i.e. Delta Lake). Amazon Web Services (AWS) is another pioneer with a Lake House architecture (i.e. Lake Formation + AWS Analytics). Some of the main high level technical features and solutions of a Lake House architecture include: ACID transactions, upserts [update + insert] & deletes, schema enforcement, file compaction, batch & streaming unification, and incremental loading. The 3 main open Data Lake table formats are Delta Lake, Apache Hudi, and Apache Iceberg. All three provide similar techniques to the features mentioned. In this blog I will discuss the fundamentals, building blocks, and solutions architecture of Databricks Lakehouse and AWS Lake House.
 
-# Databricks Lakehouse
+## Databricks Lakehouse
 *Fundamentals*
 
 Databricks Lakehouse is centered around a technology named Delta Lake, an open source project managed by the Linux Foundation. Delta Lake is a storage layer via Apache Parquet format that provides ACID-compliant transactions and additional benefits to Data Lakes. Databricks mentions 9 common Data Lake challenges Delta Lake can help address. They are:
@@ -70,7 +70,7 @@ https://drive.google.com/viewerng/viewer?url=https://cidrdb.org/cidr2021/papers/
 
 https://drive.google.com/viewerng/viewer?url=https://databricks.com/wp-content/uploads/2020/08/p975-armbrust.pdf
 
-# Amazon Web Services Lake House
+## Amazon Web Services Lake House
 *Fundamentals*
 
 AWS Lake House is focused around using many of the AWS Analytics services in tandem. Specifically, integrating these specialized services to build seamless interaction between Data Lake, Data Warehouse, and the data movement between systems. AWS is a firm believer of using the right tool for the right job, which I personally advocate too. Often you see projects fail or implement bandaid solutions because the right tool was not available or selected. After all, chopping down a tree with a knife (or even an axe) is cumbersome and ludicrous when a chain saw is the best and recommended tool purposely designed for the particular task at hand. If shortcuts are taken and obsolete technologies are chosen, over time your Data Lake will crumble and succumb to suffering performance penalties and becoming a “Data Swamp”. Hence, AWS Lake House stresses how important it is to ensure data movement between AWS services become easier by design. Therefore, AWS describes the 3 data movement scenarios as:
@@ -136,7 +136,7 @@ https://aws.amazon.com/blogs/big-data/harness-the-power-of-your-data-with-aws-an
 
 https://aws.amazon.com/blogs/big-data/build-a-lake-house-architecture-on-aws/
 
-# Conclusion
+## Conclusion
 
 Overall, both architectures provide very similar solutions. From a cultural perspective Databricks Lakehouse and AWS Lake House are revolutionizing better ways to manage, store, process, and consume data. From a technical perspective Databricks Lakehouse utilizes Delta Lake, Apache Parquet, and Apache Spark; AWS Lake House utilizes a plethora of AWS services leveraging a lot of the open source Apache projects mentioned throughout this blog. Some of the main technical focal points include:
 
